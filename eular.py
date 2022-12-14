@@ -2,6 +2,7 @@ import numpy as np
 from scipy import integrate
 from matplotlib import pyplot as plt
 
+
 def Euler(f1,f2,f3,f4,x): #function, step length
     h=x[1]-x[0]
     y=np.zeros(len(x))
