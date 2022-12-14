@@ -62,5 +62,6 @@ plt.title('Displacement')
 plt.grid()
 plt.xlabel('$t$')
 plt.ylabel('$x$')
-plt.show()
 plt.savefig('./1.jpg')
+plt.show()
+
