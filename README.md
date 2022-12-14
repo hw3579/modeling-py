@@ -1,1 +1,1 @@
-![image](https://raw.githubusercontent.com/limoest/daily_reminder/main/others/a.png)
+![image](./1.jpg)
