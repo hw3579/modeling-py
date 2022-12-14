@@ -3,6 +3,10 @@ from scipy import integrate
 from matplotlib import pyplot as plt
 
 
+
+h=0.005 #step length
+
+
 def Euler(f1,f2,f3,f4,x): #function, step length
     h=x[1]-x[0]
     y=np.zeros(len(x))
@@ -38,7 +42,15 @@ def heun(f1,f2,f3,f4,x):
 
 
 
-h=0.005 #step length
+def ode(t,u):
+    z1,z2,z3,z4=u
+    dz1=z2
+    dz2=-z1-z2+z4
+    dz3=z4
+    dz4=-z2-z4+0.5
+    dzdt=[dz1,dz2,dz3,dz4]
+    return dzdt
+
 
 
 x=np.arange(0,20,h)
@@ -50,13 +62,21 @@ f4=lambda z2,z4,x:-z2-z4
 
 [z1,z2,z3,z4]= Euler(f1,f2,f3,f4,x)
 [w1,w2,w3,w4]= heun(f1,f2,f3,f4,x)
-yExact=x
+Exact = integrate.odeint(ode,[0,0,0,0],x,tfirst=True)
+
+
+exact=np.zeros(len(x))
+for i in range(len(x)-1):
+ exact[i]=Exact[i][3]
+ i+=1
+
 
 #plt.plot(x,yExact)
 plt.plot(x,z3,'--')
 plt.plot(x,w3)
 plt.fill_between(x, z3, w3, facecolor="gray")
-#plt.plot(x,z1)
+plt.plot(x,exact,'r-',label='Output (y(t))')
+#plt.plot(Exact)
 plt.legend(['Euler'],['Heun'])
 plt.title('Displacement')
 plt.grid()
