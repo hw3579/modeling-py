@@ -10,6 +10,7 @@ h=float(input("step size:"))   #define the step size
 print("h=")
 print(h)
 
+x=np.arange(0,20,h) # each of the time point
 
 def Euler(f1,f2,f3,f4,x): #function for Euler method
     h=x[1]-x[0]
@@ -45,6 +46,11 @@ def heun(f1,f2,f3,f4,x): #function for Heun method
     return [z1,z2,z3,z4]
 
 
+f1=lambda z2,x: z2
+f2=lambda z1,z2,z4,x: -z1- 0.5*z2**2+   z4
+f3=lambda z4,x:            z4
+f4=lambda z2,z4,x:-z2-z4
+
 
 def ode(t,u): #odeint - the exact solution
     z1,z2,z3,z4=u
@@ -57,12 +63,6 @@ def ode(t,u): #odeint - the exact solution
 
 
 
-x=np.arange(0,20,h) # each of the time point
-
-f1=lambda z2,x: z2
-f2=lambda z1,z2,z4,x: -z1- z2+   z4
-f3=lambda z4,x:            z4
-f4=lambda z2,z4,x:-z2-z4
 
 [z1,z2,z3,z4]= Euler(f1,f2,f3,f4,x)  # z is the Euler method solution
 [w1,w2,w3,w4]= heun(f1,f2,f3,f4,x)   # w is the Heun method solution
