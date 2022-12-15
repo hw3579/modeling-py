@@ -34,7 +34,7 @@ t = np.linspace(0, 10, 100)
 
 
 
-XOdeint = integrate.odeint(f,[0,0,0,0],t,)
+XOdeint = integrate.odeint(f,[0,0,0,0],t)
 #[XOdeint,X2Odeint] = integrate.odeint(f, C, t,args=(force(t),))
 X2Odeint = integrate.odeint(f, C, t)
 
