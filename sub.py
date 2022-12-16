@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 
 #h=float(input("step size:"))   #define the step size
-h=0.01 #for test
+h=0.1 #for test
 print("h=")
 print(h)
 
@@ -75,13 +75,13 @@ def state_matrix(x,Z):
  return np.array([dz1,dz2,dz3,dz4])
 
 
-
+'''
 f1=lambda z2,x: z2
 f2=lambda z1,z2,z4,x: -z1- z2+   z4 -0.5  #f2=lambda z1,z2,z4,x: -z1- 0.5*z2**2+   z4
 f3=lambda z4,x:            z4
 f4=lambda z2,z4,x:z2-z4
 
-'''
+
 def ode(t,u): #odeint - the exact solution
     z1,z2,z3,z4=u
     dz1=z2
@@ -111,7 +111,7 @@ Error_euler=np.zeros(len(x))   #error array initialize
 Error_Heun=np.zeros(len(x))
 
 def error(y,s):  # caclulate the error 
-   result=abs((y-s)/s)
+   result=abs((y-s)/s*100)
    return result
 
 for i in range(len(x)-1):  #save the error and print the result
@@ -120,12 +120,10 @@ for i in range(len(x)-1):  #save the error and print the result
  print(x[i],"\t",exact[i],"\t",Eu_result[i],"\t ",error(Eu_result[i],exact[i]),"\t",He_result[i],error(He_result[i],exact[i]),"\t",end="\t")
  print()
 
-
-
 # plot the simulation
 plt.plot(x,Eu_result,'--',label='Euler')
 plt.plot(x,He_result,label='Heun')
-plt.plot(x,exact,'r-',label='exact')
+plt.plot(x,exact,'r',label='exact')
 plt.legend()
 plt.title('Displacement')
 plt.grid()
