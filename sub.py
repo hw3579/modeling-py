@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 Step 1: input the step size h
 '''
 #h=float(input("step size:"))   # input step size manually
-h=0.01                          # choose one method to set the step size
+h=0.05                          # choose one method to set the step size
 print("h=")                     # print the step size
 print(h)
 
@@ -151,6 +151,23 @@ for i in range(len(x)-1):  #save the error and print the result
  print(x[i],"\t",exact[i],"\t",Eu_result[i],"\t ",error(Eu_result[i],exact[i]),"\t",He_result[i],error(He_result[i],exact[i]),"\t",end="\t")
  print()
 
+
+
+
+#1/2 is FVT result,use it to calculate errors
+#calculate percentage error to choose appropriate end time
+Error_FVT_Euler = abs(1/2-abs(Eu_result[-2]))
+Error_FVT_Euler_percentage=Error_FVT_Euler/0.5*100
+print("the final Euler method error is",Error_FVT_Euler)
+print("the final Euler method error percentage is",Error_FVT_Euler_percentage)
+
+
+Error_FVT_Heun = abs(1/2-abs(He_result[-2]))
+Error_FVT_Heun_percentage=Error_FVT_Heun/0.5*100
+print("the final Heun method error is",Error_FVT_Heun)
+print("the final Heun method error percentage is",Error_FVT_Heun_percentage)
+
+
 '''
 Step5 : Plot the figure
 '''
@@ -163,19 +180,23 @@ plt.legend()
 plt.title('Displacement')
 plt.grid()
 plt.xlabel('$t$')
-plt.ylabel('$x$')
+plt.ylabel('$x_2(t)$')
 plt.savefig('./1.jpg')
+plt.savefig('1.eps',dpi=600,format='eps')
 plt.show()
 
 
 #plot the error
 plt.plot(x,Error_euler,label='Euler')
 plt.plot(x,Error_Heun,label='Heun')
+plt.ylim((0, 5))
+plt.yticks(np.arange(0, 5, 1))
 plt.legend()
 plt.title('Error in this step size')
 plt.xlabel('$t$')
 plt.ylabel('$Error\%$')
 plt.grid()
 plt.savefig('./2.jpg')
+plt.savefig('2.eps',dpi=600,format='eps')
 plt.show()
 
