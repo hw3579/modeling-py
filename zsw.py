@@ -1,4 +1,76 @@
 from matplotlib import pyplot as plt
+import numpy
+from scipy import integrate
+from sympy import *
+x1=symbols('x1')
+x2=symbols('x2')
+x3=symbols('x3')
+x4=symbols('x4')
+
+X=numpy.array([x1,x2,x3,x4])
+
+
+h=0.01
+x=numpy.arange(0,45,h)
+
+
+
+def impulse(t):     # Define the impulse force
+    if t<1:
+        return 1
+    else:
+        return 0
+
+
+#X=numpy.array([x1,x2,x3,x4])
+
+A=numpy.array([[0,1,0,0],
+              [-1,-1,0,1],
+              [0,0,0,1],
+              [0,1,0,-1]])
+
+C=numpy.array([0,-0.5,0,0])
+
+def matrix():
+    dotA=numpy.multiply(A,X)+numpy.multiply(numpy.identity(4),C)
+    return dotA
+
+
+#solution=integrate.odeint((sol,[0,0,0,0],x))
+
+a=matrix()
+
+def Euler():
+  y=numpy.zeros((len(x),4))
+  for i in range(len(x)-1):
+    eq=matrix()
+    eq[1].subs=(x1,x[i][1])
+
+
+
+
+
+  return 0
+
+
+y=numpy.zeros((len(x),4))
+for i in range(len(x)-1):
+    eq=matrix()[0]
+    eq1_list=eq.tolist()
+    #eq1_str2="".join(eq)
+    eq1_str3=" ".join('%s' %id for id in eq1_list)
+    eq1_sympy=sympify(eq1_str2)
+
+'''
+
+import matplotlib.pyplot as plt
+plt.plot(x, sol[:, 2], 'b', label='theta(t)')
+plt.plot(x, sol[:, 3], 'g', label='omega(t)')
+plt.legend(loc='best')
+plt.xlabel('t')
+plt.grid()
+plt.show()
+
 
 
 class Equation:
@@ -8,91 +80,24 @@ class Equation:
         self.vd = vd
         return
 
-    def function(self, y, t):
-        a = 0
-        n = len(self.vc)
-        for i in range(0, n - 1):
-            if i == 0:
-                a = a + (self.vc[0] / self.vc[n - 1]) * (t ** (self.vd[0] - self.vd[n - 1]))
-            else:
-                a = a + (self.vc[i] / self.vc[n - 1]) * (t ** (self.vd[i] - self.vd[n - 1])) * y[i - 1]
-        return a
-
-    def rk_function(self, t, y):
-        ddx = []
-        n = len(y)
-        for i in range(0, n - 1):
-            ddx.append(y[i + 1])
-        ddx.append((-1) * self.function(y, t))
-        return ddx
-
-    def equation_solver_euler(self, x0, b, y, h):
-        n = int((b - x0) / h)
-        m = len(y)
-        lgx = []
-        lgy = []
-        k1 = []
-        for k in range(0, 20):
-            k1.append(0)
-        for i in range(0, n + 1):
-            lgx.append(round(x0, 3))
-            lgy.append(y[0])
-            for j in range(0, m):
-                k1[j] = h * self.rk_function(x0, y)[j]
-            for j in range(0, m):
-                y[j] = y[j] + k1[j]
-            x0 = x0 + h
-        return lgx, lgy
-
-    def equation_solver_rungekutta(self, x0, b, y, h):
-        n = int((b - x0) / h)
-        m = len(y)
-        lgx = []
-        lgy = []
-        k1 = []
-        k2 = []
-        k3 = []
-        k4 = []
-        for _ in range(0, 30):
-            k1.append(0)
-            k2.append(0)
-            k3.append(0)
-            k4.append(0)
-        for i in range(0, n + 1):
-            lgx.append(round(x0, 3))
-            lgy.append(y[0])
-            for j in range(0, m):
-                k1[j] = h * self.rk_function(x0, y)[j]
-                k2[j] = h * self.rk_function(x0 + 0.5 * h, holder(y, k1, 0.5))[j]
-                k3[j] = h * self.rk_function(x0 + 0.5 * h, holder(y, k2, 0.5))[j]
-                k4[j] = h * self.rk_function(x0 + h, holder(y, k3, 1))[j]
-            for j in range(0, m):
-                y[j] = y[j] + (1. / 6.) * (k1[j] + 2 * (k2[j] + k3[j]) + k4[j])
-            x0 = x0 + h
-        return lgx, lgy
-                
+     
 
 def painter(xp, yp):
     fig, ax = plt.subplots()
     fig.set_figwidth(18)
     fig.set_figheight(18)
-    ax.grid()
-    plt.show()
-    ax.set_xlabel("xlabel")
-    ax.set_ylabel("ylabel")
-    ax.set_title("ODE")
     ax.plot(xp, yp)
-
-
-def holder(vx, vk, scale):
-    temp = [vx[0]]
-    for i in range(1, len(vx)):
-        temp.append(vx[i] + scale * vk[i])
-    return temp
-
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.grid()
+    ax.set_title("ODE")
+    plt.show()
 
 eq = Equation([1, 1, -1, 1], [1, 1, 0, 0])
 
-xp, yp = eq.equation_solver_rungekutta(0, 10, [1, 1], 0.01)
-plt.plot(xp, yp)
-plt.show()
+#xp, yp = eq.equation_solver_rungekutta(0, 10, [1, 1], 0.01)
+#painter(xp, yp)
+
+for i in range(len(xp)-1):
+ print(xp[i])
+'''
