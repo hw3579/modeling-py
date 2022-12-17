@@ -10,7 +10,7 @@ x4=symbols('x4')
 X=numpy.array([x1,x2,x3,x4])
 
 
-h=0.01
+h=0.1
 x=numpy.arange(0,45,h)
 
 
@@ -76,12 +76,16 @@ def Euler(f_list):
     y[j+1][1]=h*k2+y[j][1]
     y[j+1][2]=h*k3+y[j][2]
     y[j+1][3]=h*k4+y[j][3]
-  return y
-xxxx=Euler(f_list)
 
+    print("percentage: %s" % (j/(len(x)-1)*100))
+  return y
+
+euler_result=Euler(f_list)
 result=numpy.zeros((len(x)))
+
+
 for i in range(len(x)-1):
- result[i]=xxxx[i][2]
+ result[i]=euler_result[i][2]
 
 plt.plot(x,result)
 plt.show()
