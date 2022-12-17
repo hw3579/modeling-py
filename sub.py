@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 Step 1: input the step size h
 '''
 #h=float(input("step size:"))   # input step size manually
-h=0.05                          # choose one method to set the step size
+h=0.01                          # choose one method to set the step size
 print("h=")                     # print the step size
 print(h)
 
@@ -48,8 +48,8 @@ def Euler(Z,x):     # function for Euler method
     Z3=np.zeros(len(x))         # Defining one-dimensional arrays Z3 for extract the X2(t)
     for i in range(len(x)-1):
         Z[i+1]=h*state_matrix(x[i], Z[i])+Z[i] # f(x)=f(x,y)+h*f'(x,y)
-        Z3[i]=Z[i][2]      # Extract the X2(t)
-    
+        Z3[i]=Z[i][2]      # Extract the X2(t)  
+    Z3[-1]=Z3[-2] # The last one is zero and  make it equal to the second last one, in order to make figure more beautiful
     return Z3   # Return a one-dimensional arrays
 
 
@@ -75,7 +75,7 @@ def heun(Z,x):      #  function for Heun method
         #k2=f(x+h,y+k1*h)
         # f(x+1)=f(x,y)+h*(0.5*k1+0.5*k2)
         Z3[i]=Z[i][2]
-    
+    Z3[-1]=Z3[-2] 
     return Z3  
 
 '''
@@ -121,6 +121,9 @@ def ode(t,u): #odeint - the exact solution
     return dzdt
 
 '''
+
+
+
 '''
 Step 3: Solve the function 
 '''
@@ -154,15 +157,16 @@ for i in range(len(x)-1):  #save the error and print the result
 
 
 
+
 #1/2 is FVT result,use it to calculate errors
 #calculate percentage error to choose appropriate end time
-Error_FVT_Euler = abs(1/2-abs(Eu_result[-2]))
+Error_FVT_Euler = abs(1/2-abs(Eu_result[-1]))
 Error_FVT_Euler_percentage=Error_FVT_Euler/0.5*100
 print("the final Euler method error is",Error_FVT_Euler)
 print("the final Euler method error percentage is",Error_FVT_Euler_percentage)
 
 
-Error_FVT_Heun = abs(1/2-abs(He_result[-2]))
+Error_FVT_Heun = abs(1/2-abs(He_result[-1]))
 Error_FVT_Heun_percentage=Error_FVT_Heun/0.5*100
 print("the final Heun method error is",Error_FVT_Heun)
 print("the final Heun method error percentage is",Error_FVT_Heun_percentage)
@@ -172,9 +176,11 @@ print("the final Heun method error percentage is",Error_FVT_Heun_percentage)
 Step5 : Plot the figure
 '''
 
+
 # plot the simulation
 plt.plot(x,Eu_result,'--',label='Euler')
 plt.plot(x,He_result,label='Heun')
+exact[-1]=exact[-2]
 plt.plot(x,exact,'r',label='exact')
 plt.legend()
 plt.title('Displacement')

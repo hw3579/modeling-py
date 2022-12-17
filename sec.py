@@ -10,7 +10,7 @@ x4=symbols('x4')
 X=numpy.array([x1,x2,x3,x4])
 
 
-h=0.01
+h=0.005
 x=numpy.arange(0,45,h)
 
 
@@ -28,7 +28,7 @@ A=numpy.array([[0,1,0,0],
               [-1,-1,0,1],
               [0,0,0,1],
               [0,1,0,-1]])
-B=numpy.array([0,0,0,0.5])
+B=numpy.array([0,0,0,0])
 
 C=numpy.array([0,-0.5,0,0])
 
@@ -47,7 +47,7 @@ def array_to_sympy(i):
     eq1_str3=eq1_str2.replace('.','0.')
     eq1_str4=eq1_str3.replace('x','+x')
     eq1_str5=eq1_str4.replace('- +','-')
-    eq1_str5=eq1_str5.replace(' 0.5','+')
+    #eq1_str5=eq1_str5.replace(' 0.5','+')
     eq1_sympy=sympify(eq1_str5)
     return eq1_sympy
 
@@ -123,15 +123,49 @@ for i in range(len(x)-1):
  final_euler[i]=euler_result[i][2]
  final_Heun[i]=Heun_result[i][2]
 
+final_euler[-1]=final_euler[-2]
+final_Heun[-1]=final_Heun[-2]
+
 
 plt.plot(x,final_euler)
 plt.plot(x,final_Heun)
+plt.savefig('11.eps',dpi=600,format='eps')
 plt.show()
 
 
 
 '''
+from scipy import integrate
+F = lambda Z,t: [Z[1],Z[3] - Z[1] - Z[0],Z[3],impulse(t)/2 + Z[1] - Z[3]] 
+Exact = integrate.odeint(F,[0,0,0,0],x) #solve the function
 
+
+
+Error_euler=numpy.zeros(len(x))   #error array initialize
+Error_Heun=numpy.zeros(len(x))
+
+def error(y,s):  # caclulate the error 
+   result=abs((y-s)/s*100)
+   return result
+
+for i in range(len(x)-1):  #save the error and print the result
+ Error_euler[i]=error(final_euler[i],Exact[i][2])
+ Error_Heun[i]=error(final_Heun[i],Exact[i][2])
+
+plt.plot(x,Error_euler,label='Euler')
+plt.plot(x,Error_Heun,label='Heun')
+plt.ylim((0, 5))
+plt.yticks(numpy.arange(0, 5, 1))
+plt.legend()
+plt.title('Error in this step size')
+plt.xlabel('$t$')
+plt.ylabel('$Error\%$')
+plt.grid()
+plt.savefig('22.eps',dpi=600,format='eps')
+plt.show()
+
+'''
+'''
 import matplotlib.pyplot as plt
 plt.plot(x, sol[:, 2], 'b', label='theta(t)')
 plt.plot(x, sol[:, 3], 'g', label='omega(t)')
