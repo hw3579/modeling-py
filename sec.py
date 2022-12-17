@@ -10,7 +10,7 @@ x4=symbols('x4')
 X=numpy.array([x1,x2,x3,x4])
 
 
-h=0.1
+h=0.01
 x=numpy.arange(0,45,h)
 
 
@@ -80,16 +80,53 @@ def Euler(f_list):
     print("percentage: %s" % (j/(len(x)-1)*100))
   return y
 
-euler_result=Euler(f_list)
-result=numpy.zeros((len(x)))
 
+def Heun(f_list):
+      y=numpy.zeros((len(x),5))
+
+      for i in range(len(x-1)):
+        y[i][4]=x[i]
+      
+      y[0][3]=0.5
+
+      for j in range(len(x)-1):
+       k1=f_list[0].subs(x2,y[j][1])
+       k2=f_list[1].subs([(x1,y[j][0]),(x2,y[j][1]),(x4,y[j][3])])
+       k3=f_list[2].subs([(x4,y[j][3])])
+       k4=f_list[3].subs([(x2,y[j][1]),(x4,y[j][3])])
+
+       k11=f_list[0].subs(x2,y[j][1]+k1*h)
+       k22=f_list[1].subs([(x1,(y[j][0]+k2*h)),(x2,(y[j][1]+k2*h)),(x4,(y[j][3])+k2*h)])
+       k33=f_list[2].subs([(x4,(y[j][3])+k3*h)])
+       k44=f_list[3].subs([(x2,(y[j][1]+k4*h)),(x4,(y[j][3]+k4*h))])
+
+       y[j+1][0]=y[j][0]+h*(0.5*k1+0.5*k11)
+       y[j+1][1]=y[j][1]+h*(0.5*k2+0.5*k22)
+       y[j+1][2]=y[j][2]+h*(0.5*k3+0.5*k33)
+       y[j+1][3]=y[j][3]+h*(0.5*k4+0.5*k44)
+
+       print("Heun percentage: %s" % (j/(len(x)-1)*100))
+      return y
+
+
+
+
+
+
+
+euler_result=Euler(f_list)
+Heun_result=Heun(f_list)
+final_euler=numpy.zeros((len(x)))
+final_Heun=numpy.zeros((len(x)))
 
 for i in range(len(x)-1):
- result[i]=euler_result[i][2]
+ final_euler[i]=euler_result[i][2]
+ final_Heun[i]=Heun_result[i][2]
 
-plt.plot(x,result)
+
+plt.plot(x,final_euler)
+plt.plot(x,final_Heun)
 plt.show()
-
 
 
 
