@@ -28,11 +28,12 @@ A=numpy.array([[0,1,0,0],
               [-1,-1,0,1],
               [0,0,0,1],
               [0,1,0,-1]])
+B=numpy.array([0,0,0,0.5])
 
 C=numpy.array([0,-0.5,0,0])
 
 def matrix():
-    dotA=numpy.multiply(A,X)+numpy.multiply(numpy.identity(4),C)
+    dotA=numpy.multiply(A,X)+numpy.multiply(numpy.identity(4),B)#+numpy.multiply(numpy.identity(4),C)
     return dotA
 
 
@@ -45,7 +46,9 @@ def array_to_sympy(i):
     eq1_str2=eq1_str.replace('0','')
     eq1_str3=eq1_str2.replace('.','0.')
     eq1_str4=eq1_str3.replace('x','+x')
-    eq1_sympy=sympify(eq1_str4)
+    eq1_str5=eq1_str4.replace('- +','-')
+    eq1_str5=eq1_str5.replace(' 0.5','+')
+    eq1_sympy=sympify(eq1_str5)
     return eq1_sympy
 
 
@@ -64,12 +67,23 @@ def Euler(f_list):
     y[i][4]=x[i]
   y[0][3]=0.5
   for j in range(len(x)-1):
-   for i in range(3):
-    y[j+1][i]=f_list[i].subs([(x1,y[j][i]),(x2,y[j][i]),(x3,y[j][i]),(x4,y[j][i])])
-  return y[:2]
+    k1=f_list[0].subs(x2,y[j][1])
+    k2=f_list[1].subs([(x1,y[j][0]),(x2,y[j][1]),(x4,y[j][3])])
+    k3=f_list[2].subs([(x4,y[j][3])])
+    k4=f_list[3].subs([(x2,y[j][1]),(x4,y[j][3])])
 
-result=Euler(f_list)
+    y[j+1][0]=h*k1+y[j][0]
+    y[j+1][1]=h*k2+y[j][1]
+    y[j+1][2]=h*k3+y[j][2]
+    y[j+1][3]=h*k4+y[j][3]
+  return y
+xxxx=Euler(f_list)
 
+result=numpy.zeros((len(x)))
+for i in range(len(x)-1):
+ result[i]=xxxx[i][2]
+
+plt.plot(x,result)
 plt.show()
 
 
