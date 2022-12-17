@@ -38,28 +38,42 @@ def matrix():
 
 #solution=integrate.odeint((sol,[0,0,0,0],x))
 
-a=matrix()
-
-def Euler():
-  y=numpy.zeros((len(x),4))
-  for i in range(len(x)-1):
-    eq=matrix()
-    eq[1].subs=(x1,x[i][1])
-
-
-
-
-
-  return 0
-
-
-y=numpy.zeros((len(x),4))
-for i in range(len(x)-1):
-    eq=matrix()[0]
+def array_to_sympy(i):
+    eq=matrix()[i]
     eq1_list=eq.tolist()
-    #eq1_str2="".join(eq)
-    eq1_str3=" ".join('%s' %id for id in eq1_list)
-    eq1_sympy=sympify(eq1_str2)
+    eq1_str=" ".join('%s' %id for id in eq1_list)
+    eq1_str2=eq1_str.replace('0','')
+    eq1_str3=eq1_str2.replace('.','0.')
+    eq1_str4=eq1_str3.replace('x','+x')
+    eq1_sympy=sympify(eq1_str4)
+    return eq1_sympy
+
+
+f1=array_to_sympy(0)
+f2=array_to_sympy(1)
+f3=array_to_sympy(2)
+f4=array_to_sympy(3)
+
+f_list=[f1,f2,f3,f4]
+
+
+
+def Euler(f_list):
+  y=numpy.zeros((len(x),5))
+  for i in range(len(x-1)):
+    y[i][4]=x[i]
+  y[0][3]=0.5
+  for j in range(len(x)-1):
+   for i in range(3):
+    y[j+1][i]=f_list[i].subs([(x1,y[j][i]),(x2,y[j][i]),(x3,y[j][i]),(x4,y[j][i])])
+  return y[:2]
+
+result=Euler(f_list)
+
+plt.show()
+
+
+
 
 '''
 
