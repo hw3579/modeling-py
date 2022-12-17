@@ -5,7 +5,7 @@ from sympy import *
 
 class data:
 
- h=0.5
+ h=0.01
 
  x1=symbols('x1')
  x2=symbols('x2')
@@ -112,6 +112,6 @@ if __name__ == '__main__':
 
 
      plt.plot(data.x,final_euler)
-     plt.plot(data.x,final_Heun)
+     #plt.plot(data.x,final_Heun)
      plt.show()
 
