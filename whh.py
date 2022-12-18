@@ -18,3 +18,7 @@ def euler(x):
     return Y[:,2]
 plt.plot(x,euler(x))
 plt.show()
+
+
+error_Euler=(euler(x)[-1]-0.5)/0.5*100
+print("The Euler error percentage is: ", error_Euler)
